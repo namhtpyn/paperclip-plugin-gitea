@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/namhtpyn/paperclip-plugin-gitea/compare/v1.0.0...v1.0.1) (2026-10-03)
+
+
+### Bug Fixes
+
+* declare repository url for npm provenance verification ([447708d](https://github.com/namhtpyn/paperclip-plugin-gitea/commit/447708df4447e1e378c001ae150bcfa2bf1cb42a))
+
 # 1.0.0 (2026-10-03)
 
 
