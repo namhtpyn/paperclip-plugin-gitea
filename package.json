@@ -1,6 +1,6 @@
 {
   "name": "paperclip-plugin-gitea",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Gitea bridge for Paperclip: webhook mirroring (issues, PRs, comments, push) and per-agent tools",
   "type": "module",
   "main": "./dist/worker.js",
