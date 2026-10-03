@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/namhtpyn/paperclip-plugin-gitea/compare/v1.0.1...v1.0.2) (2026-10-03)
+
+
+### Bug Fixes
+
+* manifest must satisfy host V1 validation (apiVersion, displayName, author string, categories, capability names) ([820bf5f](https://github.com/namhtpyn/paperclip-plugin-gitea/commit/820bf5fd1f6a38587525dc7b9a9ea30e5e1e96c0))
+
 ## [1.0.1](https://github.com/namhtpyn/paperclip-plugin-gitea/compare/v1.0.0...v1.0.1) (2026-10-03)
 
 
