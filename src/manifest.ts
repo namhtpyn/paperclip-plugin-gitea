@@ -1,4 +1,4 @@
-export const PLUGIN_VERSION = "0.0.0-development";
+export const PLUGIN_VERSION = "0.1.0";
 
 const manifest = {
   id: "paperclip.gitea",
