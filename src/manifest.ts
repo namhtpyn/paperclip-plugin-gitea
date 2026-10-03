@@ -1,13 +1,16 @@
-export const PLUGIN_VERSION = "0.1.0";
+import type { PaperclipPluginManifestV1 } from "@paperclipai/plugin-sdk";
 
-const manifest = {
+export const PLUGIN_VERSION = "1.0.0";
+
+const manifest: PaperclipPluginManifestV1 = {
   id: "paperclip.gitea",
-  name: "Gitea",
+  apiVersion: 1,
   version: PLUGIN_VERSION,
+  displayName: "Gitea",
   description:
-    "Bridge Gitea to Paperclip: mirror issues, PRs, comments and push events into linked Paperclip issues, and expose per-agent Gitea tools.",
-  author: { name: "namhtpyn" },
-  homepage: "https://github.com/namhtpyn/paperclip-plugin-gitea",
+    "Bridge Gitea to Paperclip: mirror issues, PRs, comments and push events into linked Paperclip issues, and expose a per-agent Gitea API tool bound to each agent's bot account.",
+  author: "namhtpyn",
+  categories: ["connector", "automation"],
   capabilities: [
     "http.outbound",
     "webhooks.receive",
@@ -18,7 +21,9 @@ const manifest = {
     "secrets.read-ref",
     "agent.tools.register",
     "issues.read",
-    "issues.write",
+    "issues.create",
+    "issues.update",
+    "issue.comments.create",
     "agents.read",
   ],
   entrypoints: {
