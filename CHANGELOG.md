@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/namhtpyn/paperclip-plugin-gitea/compare/v1.0.2...v1.0.3) (2026-10-03)
+
+
+### Bug Fixes
+
+* resolve webhookSecret secret-ref at config apply (plain-string parse dropped refs to empty) ([bdb50d7](https://github.com/namhtpyn/paperclip-plugin-gitea/commit/bdb50d72ce26a607ed72f1d02a5c427f068e1e73))
+
 ## [1.0.2](https://github.com/namhtpyn/paperclip-plugin-gitea/compare/v1.0.1...v1.0.2) (2026-10-03)
 
 
