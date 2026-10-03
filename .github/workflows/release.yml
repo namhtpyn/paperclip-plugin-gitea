@@ -38,17 +38,17 @@ jobs:
       # npm OIDC trusted publishing: @semantic-release/npm 13.x exchanges this
       # job's OIDC identity for a short-lived publish token — no NPM_TOKEN needed
       # once the package exists on npm and its Trusted Publisher is configured:
-      #   npmjs.com -> paperclip-plugin-matrix-chat -> Settings -> Trusted Publisher
-      #     GitHub Actions / namhtpyn / paperclip-plugin-matrix-chat / release.yml / (env blank)
+      #   npmjs.com -> paperclip-plugin-gitea -> Settings -> Trusted Publisher
+      #     GitHub Actions / namhtpyn / paperclip-plugin-gitea / release.yml / (env blank)
       # NPM_TOKEN (classic Automation token) is only needed to bootstrap the
       # package name; delete the secret after configuring the Trusted Publisher.
       - name: Preflight npm auth
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          if ! curl -sfo /dev/null https://registry.npmjs.org/paperclip-plugin-matrix-chat; then
+          if ! curl -sfo /dev/null https://registry.npmjs.org/paperclip-plugin-gitea; then
             if [ -z "$NPM_TOKEN" ]; then
-              echo "::error::paperclip-plugin-matrix-chat does not exist on npm yet, and OIDC trusted publishing cannot create a new package. Either (a) bootstrap once from a logged-in npm session (npm publish --access public), then configure the Trusted Publisher on npmjs.com, or (b) temporarily set the NPM_TOKEN secret (classic Automation token) so this workflow can create it — then configure the Trusted Publisher and delete the secret."
+              echo "::error::paperclip-plugin-gitea does not exist on npm yet, and OIDC trusted publishing cannot create a new package. Either (a) bootstrap once from a logged-in npm session (npm publish --access public), then configure the Trusted Publisher on npmjs.com, or (b) temporarily set the NPM_TOKEN secret (classic Automation token) so this workflow can create it — then configure the Trusted Publisher and delete the secret."
               exit 1
             fi
             echo "package not on npm yet; NPM_TOKEN present -> bootstrap publish via token"

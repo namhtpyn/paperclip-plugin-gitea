@@ -2,7 +2,7 @@
   "branches": [
     "main"
   ],
-  "repositoryUrl": "https://github.com/namhtpyn/paperclip-plugin-matrix-chat.git",
+  "repositoryUrl": "https://github.com/namhtpyn/paperclip-plugin-gitea.git",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
