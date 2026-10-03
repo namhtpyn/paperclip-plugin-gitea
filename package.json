@@ -1,0 +1,38 @@
+{
+  "name": "paperclip-plugin-gitea",
+  "version": "0.0.0-development",
+  "description": "Gitea bridge for Paperclip: webhook mirroring (issues, PRs, comments, push) and per-agent tools",
+  "type": "module",
+  "main": "./dist/worker.js",
+  "files": ["dist", "LICENSE", "README.md"],
+  "scripts": {
+    "build": "node scripts/sync-version.mjs && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "smoke": "node smoke.mjs"
+  },
+  "keywords": ["paperclip", "paperclip-plugin", "gitea"],
+  "author": "namhtpyn",
+  "license": "MIT",
+  "dependencies": {
+    "@paperclipai/plugin-sdk": "2026.1001.0",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^13.2.0",
+    "@types/node": "^22.10.0",
+    "semantic-release": "^24.2.0",
+    "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "@semantic-release/npm": "$@semantic-release/npm"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "paperclipPlugin": {
+    "manifest": "./dist/manifest.js",
+    "worker": "./dist/worker.js"
+  }
+}
