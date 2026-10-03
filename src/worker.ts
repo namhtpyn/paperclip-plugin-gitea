@@ -24,7 +24,7 @@ interface EndpointConfig {
 interface BridgeConfig {
   companyId: string;
   giteaUrl: string;
-  webhookSecret: string;
+  webhookSecret: string | EnvSecretRefBinding;
   mirrorComments: boolean;
   endpoints: EndpointConfig[];
 }
@@ -35,6 +35,7 @@ const STATE_KEY = "links";
 
 let pluginCtx: PluginContext | null = null;
 let activeConfig: BridgeConfig | null = null;
+let resolvedSecret = "";
 
 /** agentId -> resolved GiteaClient (token resolved at config apply) */
 const clientsByAgent = new Map<string, { client: GiteaClient; username: string }>();
@@ -44,7 +45,16 @@ function parseConfig(raw: unknown, companyId: string): BridgeConfig | null {
   const cfg = raw as Record<string, unknown>;
   const giteaUrl = typeof cfg.giteaUrl === "string" ? cfg.giteaUrl.replace(/\/+$/, "") : "";
   if (!giteaUrl) return null;
-  const webhookSecret = typeof cfg.webhookSecret === "string" ? cfg.webhookSecret : "";
+  let webhookSecret: BridgeConfig["webhookSecret"] = "";
+  const ws = cfg.webhookSecret;
+  if (typeof ws === "string" && ws) webhookSecret = ws;
+  else if (ws && typeof ws === "object") {
+    const w = ws as Record<string, unknown>;
+    if (w.type === "secret_ref" && typeof w.secretId === "string" && w.secretId) {
+      const version = w.version;
+      webhookSecret = { type: "secret_ref", secretId: w.secretId, ...(version !== undefined ? { version: version as number | "latest" } : {}) };
+    }
+  }
   const eps: EndpointConfig[] = [];
   if (Array.isArray(cfg.endpoints)) {
     for (const e of cfg.endpoints) {
@@ -82,6 +92,17 @@ async function resolveToken(ctx: PluginContext, companyId: string, token: Endpoi
 }
 
 async function applyConfig(ctx: PluginContext, config: BridgeConfig): Promise<void> {
+  // resolve webhook secret (plain string or secret_ref) once per config apply
+  let resolvedWebhookSecret = "";
+  if (typeof config.webhookSecret === "string") resolvedWebhookSecret = config.webhookSecret;
+  else {
+    try {
+      resolvedWebhookSecret = await ctx.secrets.resolve(config.webhookSecret, { companyId: config.companyId, configPath: "webhookSecret" });
+    } catch (err) {
+      ctx.logger.error("webhook secret resolve failed", { error: String(err) });
+    }
+  }
+  resolvedSecret = resolvedWebhookSecret;
   activeConfig = config;
   clientsByAgent.clear();
   for (const [i, ep] of config.endpoints.entries()) {
@@ -278,6 +299,7 @@ export const giteaPlugin = definePlugin({
     if (!parsed) {
       ctx.logger.info("config incomplete; gitea bridge idle", { companyId });
       activeConfig = null;
+      resolvedSecret = "";
       clientsByAgent.clear();
       return;
     }
@@ -290,10 +312,10 @@ export const giteaPlugin = definePlugin({
     const cfg = activeConfig;
     if (!cfg) throw new Error("plugin not configured");
 
-    // 1. verify HMAC-SHA256 signature
+    // 1. verify HMAC-SHA256 signature (resolved at config-apply time)
     const sigHeader = headerValue(input.headers, "x-gitea-signature");
-    if (!cfg.webhookSecret) throw new Error("webhook secret not configured");
-    if (!GiteaClient.verifySignature(input.rawBody, sigHeader, cfg.webhookSecret)) {
+    if (!resolvedSecret) throw new Error("webhook secret not configured");
+    if (!GiteaClient.verifySignature(input.rawBody, sigHeader, resolvedSecret)) {
       throw new Error("invalid webhook signature");
     }
 

@@ -1,6 +1,6 @@
 import type { PaperclipPluginManifestV1 } from "@paperclipai/plugin-sdk";
 
-export const PLUGIN_VERSION = "1.0.0";
+export const PLUGIN_VERSION = "1.0.1";
 
 const manifest: PaperclipPluginManifestV1 = {
   id: "paperclip.gitea",
